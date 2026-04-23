@@ -86,8 +86,8 @@ true_neon_css = """
 """
 st.markdown(true_neon_css, unsafe_allow_html=True)
 
-st.title("Visionary System")
-st.markdown("### Neural Face Architecture")
+st.title("Vision AI")
+st.markdown("### Face Detection and Recognition System")
 
 # Create dataset directory if not exists
 if not os.path.exists('dataset'):
@@ -232,7 +232,7 @@ elif choice == "Train Model":
             recognizer.train(faces, ids)
             recognizer.write('trainer.yml')
             
-            st.success(f"Neural Network successfully trained on {len(np.unique(ids))} unique IDs!")
+            st.success(f"Successfully trained on {len(np.unique(ids))} unique IDs!")
 
 # --- Module 3: Live Recognition ---
 elif choice == "Live Recognition":
