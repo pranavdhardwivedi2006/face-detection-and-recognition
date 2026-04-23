@@ -1,0 +1,6 @@
+.vscode/*
+dataset/*
+names.json
+trainer.yml
+.env
+__pycache__/*
