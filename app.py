@@ -196,3 +196,40 @@ if choice == "Add Face Data":
                 st.session_state.capture_status = 'idle'
                 st.session_state.input_key_counter += 1
                 st.rerun()
+
+# --- Module 2: Train Model ---
+elif choice == "Train Model":
+    st.subheader("Stage 2: Train LBPH Engine")
+    
+    if st.button("Initialize Training Sequence"):
+        with st.spinner("Compiling facial geometry..."):
+            try:
+                recognizer = cv2.face.LBPHFaceRecognizer_create()
+            except AttributeError:
+                st.error("Missing dependency! Run: pip install opencv-contrib-python")
+                st.stop()
+                
+            image_paths = [os.path.join('dataset', f) for f in os.listdir('dataset') if f.endswith('.jpg')]
+            
+            if len(image_paths) == 0:
+                st.warning("No data found! Go to 'Add Face Data' first.")
+                st.stop()
+                
+            faces, ids = [], []
+            
+            for image_path in image_paths:
+                img = Image.open(image_path).convert('L')
+                img_numpy = np.array(img, 'uint8')
+                try:
+                    current_id = int(os.path.split(image_path)[-1].split(".")[1])
+                except (IndexError, ValueError):
+                    continue
+                    
+                faces.append(img_numpy)
+                ids.append(current_id)
+                
+            ids = np.array(ids, dtype=np.int32)
+            recognizer.train(faces, ids)
+            recognizer.write('trainer.yml')
+            
+            st.success(f"Neural Network successfully trained on {len(np.unique(ids))} unique IDs!")
